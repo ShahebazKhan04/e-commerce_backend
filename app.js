@@ -17,6 +17,6 @@ app.use(morgan('dev'))
 // routes
 app.use('/api/v1', testRoute)
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT || 5500, () => {
     console.log(`server started at http://localhost:${process.env.PORT}`);
 })
