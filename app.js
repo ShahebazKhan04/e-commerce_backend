@@ -6,6 +6,9 @@ import userRoute from "./routes/userRoute.js";
 import cookieParser from "cookie-parser";
 import cloudinary from 'cloudinary'
 import productRoute from "./routes/productRoute.js";
+import categoryRoute from "./routes/categoryRoute.js";
+import orderRoute from "./routes/orderRoute.js";
+import Stripe from "stripe";
 
 // dot env config
 dotenv.config();
@@ -15,6 +18,10 @@ const app = express();
 
 // database connection
 connectDb();
+
+// Stripe config
+
+const stripe = new Stripe(process.env.STRIPE_API_SECRET);
 
 // cloudinary config
 cloudinary.v2.config({
@@ -31,6 +38,8 @@ app.use(cookieParser());
 // routes
 app.use("/ecom/user", userRoute);
 app.use("/ecom/product", productRoute);
+app.use("/ecom/category", categoryRoute);
+app.use("/ecom/order", orderRoute);
 
 app.listen(process.env.PORT || 5500, () => {
   console.log(

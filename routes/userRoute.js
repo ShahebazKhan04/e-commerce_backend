@@ -4,6 +4,7 @@ import {
   loginUser,
   logoutUserController,
   registerController,
+  resetPasswordController,
   updatePasswordController,
   updateProfileController,
   updateProfilePicController,
@@ -18,5 +19,11 @@ userRoute.get("/profile", isAuth, getProfileController);
 userRoute.get("/logout", isAuth, logoutUserController);
 userRoute.put("/register-update", isAuth, updateProfileController);
 userRoute.put("/password-update", isAuth, updatePasswordController);
-userRoute.put("/picture-update", singleUpload, isAuth, updateProfilePicController)
+userRoute.put(
+  "/picture-update",
+  singleUpload,
+  isAuth,
+  updateProfilePicController
+);
+userRoute.post("/reset-password", resetPasswordController);
 export default userRoute;

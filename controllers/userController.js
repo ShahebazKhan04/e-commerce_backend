@@ -4,7 +4,8 @@ import cloudinary from "cloudinary";
 
 export const registerController = async (req, res) => {
   try {
-    const { name, email, password, address, city, country, phone } = req.body;
+    const { name, email, password, address, city, country, phone, answer } =
+      req.body;
 
     if (
       !name ||
@@ -13,7 +14,8 @@ export const registerController = async (req, res) => {
       !address ||
       !city ||
       !country ||
-      !phone
+      !phone ||
+      !answer
     ) {
       return res.status(500).json({
         success: false,
@@ -37,6 +39,7 @@ export const registerController = async (req, res) => {
       city,
       country,
       phone,
+      answer,
     });
 
     res.status(201).json({
@@ -245,6 +248,37 @@ export const updateProfilePicController = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Error while updating picture",
+      error: error.message,
+    });
+  }
+};
+
+export const resetPasswordController = async (req, res) => {
+  try {
+    const { email, newPassword, answer } = req.body;
+    if (!email || !newPassword || !answer) {
+      return res.status(404).json({
+        success: false,
+        message: "all fields are required",
+      });
+    }
+    const user = await userModel.findOne({ email, answer });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Invalid User and answer",
+      });
+    }
+    user.password = newPassword;
+    await user.save();
+    res.status(200).json({
+      success: true,
+      message: "password has reset successfully ",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error while resetting password",
       error: error.message,
     });
   }
