@@ -1,4 +1,5 @@
 import userModel from "../models/userModel.js";
+import { registerUserServices } from "../services/userServices.js";
 import { getDataUri } from "../utils/features.js";
 import cloudinary from "cloudinary";
 
@@ -23,15 +24,7 @@ export const registerController = async (req, res) => {
       });
     }
 
-    const existingUser = await userModel.findOne({ email });
-    if (existingUser) {
-      return res.status(500).json({
-        success: false,
-        message: "email is already taken",
-      });
-    }
-
-    const createUser = await userModel.create({
+    const user = registerUserServices({
       name,
       email,
       password,
@@ -45,7 +38,7 @@ export const registerController = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "user registered successfully",
-      user: createUser,
+      user: user,
     });
   } catch (error) {
     res.status(500).json({
